@@ -66,7 +66,7 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> <span class="fa fa-address-book-o"></span> Do Post</a>
+                        <a class="nav-link" href="#"> <span class="fa fa-edit"></span> Do Post</a>
                     </li>
 
                 </ul>
