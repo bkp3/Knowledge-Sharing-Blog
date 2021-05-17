@@ -31,6 +31,11 @@
 
 
         <style>
+            body{
+                background: url(img/bg.jpg);
+                background-size: cover;
+                background-attachment: fixed;
+            }
             .banner-background{
                 clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 100%, 70% 92%, 25% 100%, 0 92%, 0 0);
             }

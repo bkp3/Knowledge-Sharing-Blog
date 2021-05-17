@@ -1,3 +1,5 @@
+<%@page import="java.text.DateFormat"%>
+<%@page import="com.blog.dao.UserDao"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.blog.entities.Category"%>
 <%@page import="com.blog.entities.Category"%>
@@ -35,8 +37,35 @@
 
 
         <style>
+            body{
+                background: url(img/bg.jpg);
+                background-size: cover;
+                background-attachment: fixed;
+            }
             .banner-background{
                 clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 100%, 70% 92%, 25% 100%, 0 92%, 0 0);
+            }
+            
+            .post-title{
+                font-weight: 100;
+                font-size: 30px;
+            }
+            
+            .post-content{
+                font-weight: 100;
+                font-size: 25px;
+            }
+            .post-date{
+                font-style: italic;
+                font-weight: bold;
+            }
+            .post-user-info{
+                font-size: 20px;
+                font-weight: 100;
+            }
+            .row-user{
+                border: 1px solid #e2e2e2;
+                padding-top: 15px; 
             }
         </style>
 
@@ -104,15 +133,28 @@
                     <div class="card">
 
                         <div class="card-header primary-background text-white">
-                            <%= p.getpTitle()%>
+                            <h4 class="post-title"><%= p.getpTitle()%></h4>
                         </div>
 
                         <div class="card-body">
                             <img class="card-img-top my-2" src="blog_pics/<%=p.getpPic()%>" alt="Card image cap">
-                            <p><%= p.getpContent()%></p>
+                            
+                            <div class="row my-3 row-user">
+                                <div class="col-md-6">
+                                    <% UserDao ud=new UserDao(ConnectionProvider.getConnection()); %>
+                                    <p class="post-user-info"><a href="#"><%=ud.getUserByUserId(p.getUserId()).getName()  %></a> has posted.</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="post-date"><%=DateFormat.getDateTimeInstance().format(p.getpDate()) %></p>
+                                </div>
+                            </div>
+                            
+                            <p class="post-content"><%= p.getpContent()%></p>
                             <br><br>
 
-                            <pre><%=p.getpCode()%></pre>
+                            <div class="post-code">
+                                <pre><%=p.getpCode()%></pre>
+                            </div>
                         </div>
 
                         <div class="card-footer primary-background">
