@@ -105,6 +105,45 @@
         %>
 
 
+        <!--main body of the page-->
+        <main>
+            <div class="container">
+                <div class="row mt-4">
+
+                    <!--first col-->
+                    <div class="col-md-4">
+                        <!--categories-->
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action active">
+                                All Posts
+                            </a>
+                            <%
+                                PostDao d = new PostDao(ConnectionProvider.getConnection());
+                                ArrayList<Category> list1 = new ArrayList<>();
+                                list1 = d.getAllCategory();
+                                for (Category cc : list1) {
+
+                            %>
+                            <a href="#" class="list-group-item list-group-item-action"><%= cc.getName()%></a>
+                            <%
+                                }
+                            %>
+                        </div>
+                    </div>
+
+                    <!--second col-->
+                    <div class="col-md-8">
+                        <!--posts-->
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+
+
+
+        <!--end of main body page-->
 
 
 
@@ -284,12 +323,12 @@
                                 <label>Select your pic:- </label>
                                 <input type="file" name="pic"/>
                             </div>
-                                <div class="container text-center">
-                                    <button type="submit" class="btn btn-outline-primary">Post</button>
-                                </div>
+                            <div class="container text-center">
+                                <button type="submit" class="btn btn-outline-primary">Post</button>
+                            </div>
                         </form>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -303,6 +342,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="js/myjs.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
 
         <script>
             $(document).ready(function () {
@@ -336,20 +377,26 @@
                     console.log("you have clicked on submit...")
                     let form = new FormData(this);
 //                    now requesting to server
-                     $.ajax({
-                         url: "AddPostServlet",
-                         type: 'POST',
-                         data: form,
-                         success: function(data,textStatus,jqXHR){
-                             //success
-                             console.log(data)
-                         },
-                         error: function(jqXHR,textStatus,errorThrown){
-                             //error
-                         },
-                         processData: false,
-                         contentType: false
-                     })
+                    $.ajax({
+                        url: "AddPostServlet",
+                        type: 'POST',
+                        data: form,
+                        success: function (data, textStatus, jqXHR) {
+                            //success
+                            console.log(data);
+                            if (data.trim() == 'done') {
+                                swal("Good job!", "Saved Successfully", "success");
+                            } else {
+                                swal("Error!", "Something went wrong try again...", "error");
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            //error
+                            swal("Error!", "Something went wrong try again...", "error");
+                        },
+                        processData: false,
+                        contentType: false
+                    })
 
                 })
             })
