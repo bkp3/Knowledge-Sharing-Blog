@@ -1,9 +1,9 @@
-
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.blog.entities.Category"%>
+<%@page import="com.blog.entities.Category"%>
+<%@page import="com.blog.entities.Post"%>
 <%@page import="com.blog.dao.PostDao"%>
 <%@page import="com.blog.helper.ConnectionProvider"%>
-<%@page import="com.blog.entities.Message"%>
 <%@page import="com.blog.entities.User"%>
 <%@page errorPage="error_page.jsp" %>
 <%
@@ -14,16 +14,20 @@
     }
 
 %>
+<%    int postId = Integer.parseInt(request.getParameter("post_id"));
+    PostDao d = new PostDao(ConnectionProvider.getConnection());
+    Post p = d.getPostByPostId(postId);
+
+%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title><%= p.getpTitle()%></title>
 
-
-       
         <!--CSS-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link href="css/mystyle.css" rel="stylesheet" type="text/css"/>
@@ -36,7 +40,6 @@
             }
         </style>
 
-
     </head>
     <body>
 
@@ -44,7 +47,7 @@
 
 
         <nav class="navbar navbar-expand-lg navbar-dark primary-background">
-            <a class="navbar-brand" href="index.jsp"> <span class="fa fa-asterisk"></span> Knowledge Blog</a>
+            <a class="navbar-brand" href="profile.jsp"> <span class="fa fa-asterisk"></span> Knowledge Blog</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -52,7 +55,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#"><span class="fa fa-home"></span>  Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="profile.jsp"><span class="fa fa-home"></span>  Home <span class="sr-only">(current)</span></a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -92,67 +95,38 @@
         <!--end of navbar-->
 
 
-
-        <%
-            Message m = (Message) session.getAttribute("msg");
-            if (m != null) {
-        %>
-        <div class="alert <%=m.getCssClass()%> " role="alert">
-            <%= m.getContent()%>
-        </div>
-        <%
-                session.removeAttribute("msg");
-            }
-        %>
+        <!--main content of body-->
 
 
-        <!--main body of the page-->
-        <main>
-            <div class="container">
-                <div class="row mt-4">
+        <div class="container">
+            <div class="row my-4">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
 
-                    <!--first col-->
-                    <div class="col-md-4">
-                        <!--categories-->
-                        <div class="list-group">
-                            <a href="#" onclick="getPosts(0,this)" class="c-link list-group-item list-group-item-action active">
-                                All Posts
-                            </a>
-                            <%
-                                PostDao d = new PostDao(ConnectionProvider.getConnection());
-                                ArrayList<Category> list1 = new ArrayList<>();
-                                list1 = d.getAllCategory();
-                                for (Category cc : list1) {
-
-                            %>
-                            <a href="#" onclick="getPosts(<%= cc.getCid() %>,this)" class="c-link list-group-item list-group-item-action"><%= cc.getName()%></a>
-                            <%
-                                }
-                            %>
-                        </div>
-                    </div>
-
-                    <!--second col-->
-                    <div class="col-md-8">
-                        <!--posts-->
-                        <div class="container text-center" id="loader">
-                            <i class="fa fa-refresh fa-3x fa-spin"></i>
-                            <h3 class="mt-2">Loading...</h3>
+                        <div class="card-header primary-background text-white">
+                            <%= p.getpTitle()%>
                         </div>
 
-                        <div class="container-fluid"  id="post-container">
+                        <div class="card-body">
+                            <img class="card-img-top my-2" src="blog_pics/<%=p.getpPic()%>" alt="Card image cap">
+                            <p><%= p.getpContent()%></p>
+                            <br><br>
+
+                            <pre><%=p.getpCode()%></pre>
+                        </div>
+
+                        <div class="card-footer primary-background">
+                            <a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i><span>10</span></a>
+
+                            <a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i><span>20</span></a>
 
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-
-        </main>
-
-
-
-        <!--end of main body page-->
+        <!--end of main content body-->
 
 
 
@@ -410,35 +384,6 @@
                 })
             })
         </script>
-
-        <!--loading post using JS-->
-        <script>
-
-            function getPosts(catId, temp) {
-                $("#loader").show();
-                $("#post-container").hide()
-                
-                $(".c-link").removeClass('active');
-                
-                $.ajax({
-                    url: "load_posts.jsp",
-                    data: {cid: catId},
-                    success: function (data, textStatus, jqXHR) {
-                        console.log(data);
-                        $("#loader").hide();
-                        $("#post-container").show();
-                        $("#post-container").html(data);
-                        $(temp).addClass('active');
-                    }
-                })
-            }
-
-            $(document).ready(function (e) {
-                let allPostRef=$('.c-link')[0]
-                getPosts(0,allPostRef)
-            })
-        </script>
-
 
     </body>
 </html>
