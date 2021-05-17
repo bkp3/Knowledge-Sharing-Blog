@@ -1,4 +1,8 @@
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.blog.entities.Category"%>
+<%@page import="com.blog.dao.PostDao"%>
+<%@page import="com.blog.helper.ConnectionProvider"%>
 <%@page import="com.blog.entities.Message"%>
 <%@page import="com.blog.entities.User"%>
 <%@page errorPage="error_page.jsp" %>
@@ -230,7 +234,7 @@
 
         <!--add post modal-->
 
-        
+
 
         <!-- Modal -->
         <div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -243,33 +247,39 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        
+
                         <form action="AddPostServlet" method="POST">
-                            
+
                             <div class="form-group">
                                 <select class="form-control">
                                     <option selected disabled>---Select Category---</option>
-                                    <option>Cat2</option>
-                                    <option>Cat3</option>
-                                    <option>Cat4</option>
-                                    <option>Cat5</option>
+                                    <%
+                                        PostDao postd = new PostDao(ConnectionProvider.getConnection());
+                                        ArrayList<Category> list = new ArrayList<>();
+                                        list=postd.getAllCategory();
+                                        for (Category c : list) {
+                                    %>
+                                    <option> <%= c.getName() %> </option>
+                                    <%
+                                        }
+                                    %>
                                 </select>
-                                
+
                             </div>
-                                
-                            
+
+
                             <div class="form-group">
                                 <input type="text" placeholder="Enter Post Title" class="form-control"/>
                             </div>
-                            
+
                             <div class="form-group">
                                 <textarea class="form-control" style="height:200px;" placeholder="Enter your Content"></textarea>
                             </div>
-                            
+
                             <div class="form-group">
                                 <textarea class="form-control" style="height:200px;" placeholder="Enter your Program (if any)"></textarea>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>Select your pic:- </label>
                                 <input type="file"/>
@@ -283,7 +293,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!--end add post modal-->
 
 
