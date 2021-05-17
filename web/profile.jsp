@@ -64,9 +64,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#"> <span class="fa fa-address-book-o"></span> Contact us</a>
                     </li>
-                    
+
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> <span class="fa fa-edit"></span> Do Post</a>
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#add-post-modal"> <span class="fa fa-edit"></span> Do Post</a>
                     </li>
 
                 </ul>
@@ -87,18 +87,18 @@
         <!--end of navbar-->
 
 
-        
-                            <%
-                                Message m = (Message) session.getAttribute("msg");
-                                if (m != null) {
-                            %>
-                            <div class="alert <%=m.getCssClass()%> " role="alert">
-                                <%= m.getContent() %>
-                            </div>
-                            <%        
-                                    session.removeAttribute("msg");
-                                }
-                            %>
+
+        <%
+            Message m = (Message) session.getAttribute("msg");
+            if (m != null) {
+        %>
+        <div class="alert <%=m.getCssClass()%> " role="alert">
+            <%= m.getContent()%>
+        </div>
+        <%
+                session.removeAttribute("msg");
+            }
+        %>
 
 
 
@@ -156,39 +156,39 @@
                                     </tbody>
                                 </table>
                             </div>
-                                            
-                                            
+
+
                             <!--profile-edit-->
                             <div id="profile-edit" style="display: none;">
                                 <h3 class="mt-2">Please Edit Carefully</h3>
-                                
+
                                 <form action="EditServlet" method="POST" enctype="multipart/form-data">
                                     <table class="table">
                                         <tr>
                                             <td>ID :</td>
                                             <td><%= user.getId()%></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>Email :</td>
                                             <td><input class="form-control" type="email" name="user_email" value="<%= user.getEmail()%>"></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>Name :</td>
                                             <td><input class="form-control" type="text" name="user_name" value="<%= user.getName()%>"></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>Password :</td>
                                             <td><input class="form-control" type="password" name="user_password" value="<%= user.getPassword()%>"></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>Gender :</td>
-                                            <td><%= user.getGender().toUpperCase() %></td>
+                                            <td><%= user.getGender().toUpperCase()%></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>About :</td>
                                             <td>
@@ -197,20 +197,20 @@
                                                 </textarea>
                                             </td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>New Profile Pic :</td>
                                             <td>
                                                 <input type="file" name="image" class="form-control"/>
                                             </td>
                                         </tr>
-                                        
-                                        
-                                        
+
+
+
                                     </table>
-                                                <div class="container">
-                                                    <button type="submit" class="btn btn-outline-primary">Save</button>
-                                                </div>
+                                    <div class="container">
+                                        <button type="submit" class="btn btn-outline-primary">Save</button>
+                                    </div>
                                 </form>
 
                             </div>                
@@ -227,6 +227,64 @@
 
 
         <!--end of profile modal-->
+
+        <!--add post modal-->
+
+        
+
+        <!-- Modal -->
+        <div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Provide the post details...</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <form action="AddPostServlet" method="POST">
+                            
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option selected disabled>---Select Category---</option>
+                                    <option>Cat2</option>
+                                    <option>Cat3</option>
+                                    <option>Cat4</option>
+                                    <option>Cat5</option>
+                                </select>
+                                
+                            </div>
+                                
+                            
+                            <div class="form-group">
+                                <input type="text" placeholder="Enter Post Title" class="form-control"/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <textarea class="form-control" style="height:200px;" placeholder="Enter your Content"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <textarea class="form-control" style="height:200px;" placeholder="Enter your Program (if any)"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Select your pic:- </label>
+                                <input type="file"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--end add post modal-->
 
 
 
@@ -245,12 +303,12 @@
                     if (editStatus == false) {
                         $("#profile-details").hide()
                         $("#profile-edit").show()
-                        editStatus=true;
+                        editStatus = true;
                         $(this).text("Back")
-                    }else{
+                    } else {
                         $("#profile-details").show()
                         $("#profile-edit").hide()
-                        editStatus=false;
+                        editStatus = false;
                         $(this).text("Edit")
                     }
                 })
