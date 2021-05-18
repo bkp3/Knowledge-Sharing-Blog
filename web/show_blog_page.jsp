@@ -1,3 +1,4 @@
+<%@page import="com.blog.dao.LikeDao"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="com.blog.dao.UserDao"%>
 <%@page import="java.util.ArrayList"%>
@@ -45,12 +46,12 @@
             .banner-background{
                 clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 100%, 70% 92%, 25% 100%, 0 92%, 0 0);
             }
-            
+
             .post-title{
                 font-weight: 100;
                 font-size: 30px;
             }
-            
+
             .post-content{
                 font-weight: 100;
                 font-size: 25px;
@@ -69,363 +70,375 @@
             }
         </style>
 
-    </head>
-    <body>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v10.0" nonce="HQwpQ6n7"></script>
 
-        <!--navbar-->
+</head>
+<body>
 
-
-        <nav class="navbar navbar-expand-lg navbar-dark primary-background">
-            <a class="navbar-brand" href="profile.jsp"> <span class="fa fa-asterisk"></span> Knowledge Blog</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="profile.jsp"><span class="fa fa-home"></span>  Home <span class="sr-only">(current)</span></a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="fa fa-check-square-o"></span> Categories
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Programming Language</a>
-                            <a class="dropdown-item" href="#">Project Implementation</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Data Structure</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"> <span class="fa fa-address-book-o"></span> Contact us</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#add-post-modal"> <span class="fa fa-edit"></span> Do Post</a>
-                    </li>
-
-                </ul>
-
-                <ul class="navbar-nav mr-right">
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal"> <span class="fa fa-user-circle"></span> <%= user.getName()%></a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="LogoutServlet"> <span class="fa fa-sign-out"></span> Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <!--end of navbar-->
+    <!--navbar-->
 
 
-        <!--main content of body-->
+    <nav class="navbar navbar-expand-lg navbar-dark primary-background">
+        <a class="navbar-brand" href="profile.jsp"> <span class="fa fa-asterisk"></span> Knowledge Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="profile.jsp"><span class="fa fa-home"></span>  Home <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="fa fa-check-square-o"></span> Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Programming Language</a>
+                        <a class="dropdown-item" href="#">Project Implementation</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Data Structure</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"> <span class="fa fa-address-book-o"></span> Contact us</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#add-post-modal"> <span class="fa fa-edit"></span> Do Post</a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav mr-right">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal"> <span class="fa fa-user-circle"></span> <%= user.getName()%></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="LogoutServlet"> <span class="fa fa-sign-out"></span> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!--end of navbar-->
 
 
-        <div class="container">
-            <div class="row my-4">
-                <div class="col-md-6 offset-md-3">
-                    <div class="card">
+    <!--main content of body-->
 
-                        <div class="card-header primary-background text-white">
-                            <h4 class="post-title"><%= p.getpTitle()%></h4>
-                        </div>
 
-                        <div class="card-body">
-                            <img class="card-img-top my-2" src="blog_pics/<%=p.getpPic()%>" alt="Card image cap">
-                            
-                            <div class="row my-3 row-user">
-                                <div class="col-md-6">
-                                    <% UserDao ud=new UserDao(ConnectionProvider.getConnection()); %>
-                                    <p class="post-user-info"><a href="#"><%=ud.getUserByUserId(p.getUserId()).getName()  %></a> has posted.</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p class="post-date"><%=DateFormat.getDateTimeInstance().format(p.getpDate()) %></p>
-                                </div>
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+
+                    <div class="card-header primary-background text-white">
+                        <h4 class="post-title"><%= p.getpTitle()%></h4>
+                    </div>
+
+                    <div class="card-body">
+                        <img class="card-img-top my-2" src="blog_pics/<%=p.getpPic()%>" alt="Card image cap">
+
+                        <div class="row my-3 row-user">
+                            <div class="col-md-6">
+                                <% UserDao ud = new UserDao(ConnectionProvider.getConnection());%>
+                                <p class="post-user-info"><a href="#"><%=ud.getUserByUserId(p.getUserId()).getName()%></a> has posted.</p>
                             </div>
-                            
-                            <p class="post-content"><%= p.getpContent()%></p>
-                            <br><br>
-
-                            <div class="post-code">
-                                <pre><%=p.getpCode()%></pre>
+                            <div class="col-md-6">
+                                <p class="post-date"><%=DateFormat.getDateTimeInstance().format(p.getpDate())%></p>
                             </div>
                         </div>
 
-                        <div class="card-footer primary-background">
-                            <a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i><span>10</span></a>
+                        <p class="post-content"><%= p.getpContent()%></p>
+                        <br><br>
 
-                            <a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i><span>20</span></a>
-
+                        <div class="post-code">
+                            <pre><%=p.getpCode()%></pre>
                         </div>
+                    </div>
+
+                    <div class="card-footer primary-background">
+
+                        <%
+                            LikeDao ld = new LikeDao(ConnectionProvider.getConnection());
+
+                        %>
+                        <a href="#" onclick="doLike(<%=p.getPid()%>,<%=user.getId()%>)" class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i><span class="like-counter"><%=ld.countLikeOnPost(p.getPid())%></span></a>
+
+                        <a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i><span>20</span></a>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="fb-comments" data-href="http://localhost:3636/KnowledgeSharingWebsiteProject/show_blog_page.jsp?post_id=<%=p.getPid() %>" data-width="" data-numposts="5"></div>
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!--end of main content body-->
-
-
-
-
-        <!--start of profile modal-->
+    <!--end of main content body-->
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header primary-background text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">View and Edit Profile</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container text-center">
-                            <img src="pics/<%= user.getProfile()%>" height="100px" width="100px" style="border-radius: 50;"/>
-                            <h5 class="modal-title mt-3" id="exampleModalLabel"><%= user.getName()%></h5>
-                            <!--details-->
 
-                            <div id="profile-details">
+
+    <!--start of profile modal-->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header primary-background text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">View and Edit Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container text-center">
+                        <img src="pics/<%= user.getProfile()%>" height="100px" width="100px" style="border-radius: 50;"/>
+                        <h5 class="modal-title mt-3" id="exampleModalLabel"><%= user.getName()%></h5>
+                        <!--details-->
+
+                        <div id="profile-details">
+                            <table class="table">
+
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">ID :</th>
+                                        <td><%= user.getId()%></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Email :</th>
+                                        <td><%= user.getEmail()%></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Gender :</th>
+                                        <td><%= user.getGender()%></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">About :</th>
+                                        <td><%= user.getAbout()%></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Registered on :</th>
+                                        <td><%= user.getDateTime()%></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <!--profile-edit-->
+                        <div id="profile-edit" style="display: none;">
+                            <h3 class="mt-2">Please Edit Carefully</h3>
+
+                            <form action="EditServlet" method="POST" enctype="multipart/form-data">
                                 <table class="table">
+                                    <tr>
+                                        <td>ID :</td>
+                                        <td><%= user.getId()%></td>
+                                    </tr>
 
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">ID :</th>
-                                            <td><%= user.getId()%></td>
+                                    <tr>
+                                        <td>Email :</td>
+                                        <td><input class="form-control" type="email" name="user_email" value="<%= user.getEmail()%>"></td>
+                                    </tr>
 
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Email :</th>
-                                            <td><%= user.getEmail()%></td>
+                                    <tr>
+                                        <td>Name :</td>
+                                        <td><input class="form-control" type="text" name="user_name" value="<%= user.getName()%>"></td>
+                                    </tr>
 
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Gender :</th>
-                                            <td><%= user.getGender()%></td>
+                                    <tr>
+                                        <td>Password :</td>
+                                        <td><input class="form-control" type="password" name="user_password" value="<%= user.getPassword()%>"></td>
+                                    </tr>
 
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">About :</th>
-                                            <td><%= user.getAbout()%></td>
+                                    <tr>
+                                        <td>Gender :</td>
+                                        <td><%= user.getGender().toUpperCase()%></td>
+                                    </tr>
 
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Registered on :</th>
-                                            <td><%= user.getDateTime()%></td>
+                                    <tr>
+                                        <td>About :</td>
+                                        <td>
+                                            <textarea rows="2" class="form-control" name="user_about">
+                                                <%= user.getAbout()%>
+                                            </textarea>
+                                        </td>
+                                    </tr>
 
-                                        </tr>
-                                    </tbody>
+                                    <tr>
+                                        <td>New Profile Pic :</td>
+                                        <td>
+                                            <input type="file" name="image" class="form-control"/>
+                                        </td>
+                                    </tr>
+
+
+
                                 </table>
-                            </div>
+                                <div class="container">
+                                    <button type="submit" class="btn btn-outline-primary">Save</button>
+                                </div>
+                            </form>
+
+                        </div>                
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="edit-profile-button" type="button" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-                            <!--profile-edit-->
-                            <div id="profile-edit" style="display: none;">
-                                <h3 class="mt-2">Please Edit Carefully</h3>
+    <!--end of profile modal-->
 
-                                <form action="EditServlet" method="POST" enctype="multipart/form-data">
-                                    <table class="table">
-                                        <tr>
-                                            <td>ID :</td>
-                                            <td><%= user.getId()%></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Email :</td>
-                                            <td><input class="form-control" type="email" name="user_email" value="<%= user.getEmail()%>"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Name :</td>
-                                            <td><input class="form-control" type="text" name="user_name" value="<%= user.getName()%>"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Password :</td>
-                                            <td><input class="form-control" type="password" name="user_password" value="<%= user.getPassword()%>"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Gender :</td>
-                                            <td><%= user.getGender().toUpperCase()%></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>About :</td>
-                                            <td>
-                                                <textarea rows="2" class="form-control" name="user_about">
-                                                    <%= user.getAbout()%>
-                                                </textarea>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>New Profile Pic :</td>
-                                            <td>
-                                                <input type="file" name="image" class="form-control"/>
-                                            </td>
-                                        </tr>
+    <!--add post modal-->
 
 
 
-                                    </table>
-                                    <div class="container">
-                                        <button type="submit" class="btn btn-outline-primary">Save</button>
-                                    </div>
-                                </form>
+    <!-- Modal -->
+    <div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Provide the post details...</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-                            </div>                
+                    <form id="add-post-form" action="AddPostServlet" method="POST">
+
+                        <div class="form-group">
+                            <select class="form-control" name="cid">
+                                <option selected disabled>---Select Category---</option>
+                                <%
+                                    PostDao postd = new PostDao(ConnectionProvider.getConnection());
+                                    ArrayList<Category> list = new ArrayList<>();
+                                    list = postd.getAllCategory();
+                                    for (Category c : list) {
+                                %>
+                                <option value="<%= c.getCid()%>"> <%= c.getName()%> </option>
+                                <%
+                                    }
+                                %>
+                            </select>
 
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="edit-profile-button" type="button" class="btn btn-primary">Edit</button>
-                    </div>
+
+
+                        <div class="form-group">
+                            <input name="pTitle" type="text" placeholder="Enter Post Title" class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea name="pContent" class="form-control" style="height:200px;" placeholder="Enter your Content"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea name="pCode" class="form-control" style="height:200px;" placeholder="Enter your Program (if any)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Select your pic:- </label>
+                            <input type="file" name="pic"/>
+                        </div>
+                        <div class="container text-center">
+                            <button type="submit" class="btn btn-outline-primary">Post</button>
+                        </div>
+                    </form>
                 </div>
+
             </div>
         </div>
+    </div>
 
-
-        <!--end of profile modal-->
-
-        <!--add post modal-->
-
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Provide the post details...</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <form id="add-post-form" action="AddPostServlet" method="POST">
-
-                            <div class="form-group">
-                                <select class="form-control" name="cid">
-                                    <option selected disabled>---Select Category---</option>
-                                    <%
-                                        PostDao postd = new PostDao(ConnectionProvider.getConnection());
-                                        ArrayList<Category> list = new ArrayList<>();
-                                        list = postd.getAllCategory();
-                                        for (Category c : list) {
-                                    %>
-                                    <option value="<%= c.getCid()%>"> <%= c.getName()%> </option>
-                                    <%
-                                        }
-                                    %>
-                                </select>
-
-                            </div>
-
-
-                            <div class="form-group">
-                                <input name="pTitle" type="text" placeholder="Enter Post Title" class="form-control"/>
-                            </div>
-
-                            <div class="form-group">
-                                <textarea name="pContent" class="form-control" style="height:200px;" placeholder="Enter your Content"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <textarea name="pCode" class="form-control" style="height:200px;" placeholder="Enter your Program (if any)"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Select your pic:- </label>
-                                <input type="file" name="pic"/>
-                            </div>
-                            <div class="container text-center">
-                                <button type="submit" class="btn btn-outline-primary">Post</button>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!--end add post modal-->
+    <!--end add post modal-->
 
 
 
-        <!--JS-->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="js/myjs.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <!--JS-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/myjs.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
 
-        <script>
-            $(document).ready(function () {
+    <script>
+                            $(document).ready(function () {
 
-                let editStatus = false;
+                                let editStatus = false;
 
-                $('#edit-profile-button').click(function () {
-                    if (editStatus == false) {
-                        $("#profile-details").hide()
-                        $("#profile-edit").show()
-                        editStatus = true;
-                        $(this).text("Back")
-                    } else {
-                        $("#profile-details").show()
-                        $("#profile-edit").hide()
-                        editStatus = false;
-                        $(this).text("Edit")
-                    }
-                })
-            });
+                                $('#edit-profile-button').click(function () {
+                                    if (editStatus == false) {
+                                        $("#profile-details").hide()
+                                        $("#profile-edit").show()
+                                        editStatus = true;
+                                        $(this).text("Back")
+                                    } else {
+                                        $("#profile-details").show()
+                                        $("#profile-edit").hide()
+                                        editStatus = false;
+                                        $(this).text("Edit")
+                                    }
+                                })
+                            });
 
-        </script>
+    </script>
 
-        <!--now add post js-->
+    <!--now add post js-->
 
-        <script>
-            $(document).ready(function (e) {
-                $("#add-post-form").on("submit", function (event) {
-                    //this code gets called when form is submitted
-                    event.preventDefault();
-                    console.log("you have clicked on submit...")
-                    let form = new FormData(this);
+    <script>
+        $(document).ready(function (e) {
+            $("#add-post-form").on("submit", function (event) {
+                //this code gets called when form is submitted
+                event.preventDefault();
+                console.log("you have clicked on submit...")
+                let form = new FormData(this);
 //                    now requesting to server
-                    $.ajax({
-                        url: "AddPostServlet",
-                        type: 'POST',
-                        data: form,
-                        success: function (data, textStatus, jqXHR) {
-                            //success
-                            console.log(data);
-                            if (data.trim() == 'done') {
-                                swal("Good job!", "Saved Successfully", "success");
-                            } else {
-                                swal("Error!", "Something went wrong try again...", "error");
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            //error
+                $.ajax({
+                    url: "AddPostServlet",
+                    type: 'POST',
+                    data: form,
+                    success: function (data, textStatus, jqXHR) {
+                        //success
+                        console.log(data);
+                        if (data.trim() == 'done') {
+                            swal("Good job!", "Saved Successfully", "success");
+                        } else {
                             swal("Error!", "Something went wrong try again...", "error");
-                        },
-                        processData: false,
-                        contentType: false
-                    })
-
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //error
+                        swal("Error!", "Something went wrong try again...", "error");
+                    },
+                    processData: false,
+                    contentType: false
                 })
-            })
-        </script>
 
-    </body>
+            })
+        })
+    </script>
+
+</body>
 </html>

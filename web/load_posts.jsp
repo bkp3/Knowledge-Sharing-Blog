@@ -1,3 +1,5 @@
+<%@page import="com.blog.entities.User"%>
+<%@page import="com.blog.dao.LikeDao"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="com.blog.entities.Post"%>
@@ -6,6 +8,7 @@
 
 <div class="row">
     <%
+        User uuu=(User)session.getAttribute("currentUser");
 
         Thread.sleep(500);
         PostDao d = new PostDao(ConnectionProvider.getConnection());
@@ -36,7 +39,12 @@
             </div>
                 <div class="card-footer text-center primary-background">
                     
-                    <a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i><span>10</span></a>
+                    <%
+                                LikeDao ld = new LikeDao(ConnectionProvider.getConnection());
+
+                            %>
+                            <a href="#" onclick="doLike(<%=p.getPid()%>,<%= uuu.getId() %>)" class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i><span class="like-counter"><%=ld.countLikeOnPost(p.getPid())%></span></a>
+                    
                     <a href="show_blog_page.jsp?post_id=<%= p.getPid() %>" class="btn btn-outline-light btn-sm">Read More...</a>
                     <a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i><span>20</span></a>
                 </div>
